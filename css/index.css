@@ -94,7 +94,6 @@ font-family: 'Noto Sans KR', sans-serif;
 /********************** Header *********************/
 .header-wrapper {
   flex-grow: 0;
-  border: 5px solid yellow;
 }
 .header-wrapper h1.title {
   display: flex;
@@ -103,7 +102,7 @@ font-family: 'Noto Sans KR', sans-serif;
   font-size: 3em;
   color: #fff;
   letter-spacing: 0.05em;
-  margin: 1.25em 0 0.75em;
+  margin: 1em 0 0.5em 0;
 }
 .header-wrapper h1.title > span {
   margin-right: 0.325em;
@@ -122,8 +121,7 @@ font-family: 'Noto Sans KR', sans-serif;
   display: flex;
   justify-content: space-between;
   flex-grow: 1;
-  margin-top: 2em;
-  border: 5px solid white;
+  margin: 1em 0;
 }
 /********************** Weather *********************/
 .weather-wrapper {
@@ -132,9 +130,15 @@ font-family: 'Noto Sans KR', sans-serif;
 }
 /************************ Map ************************/
 .map-wrapper {
+  position: relative;
+  /* overflow: hidden; */
   width: 49%;
   height: 100%;
+}
+#map {
   border: 5px solid rgb(51, 255, 0);
+  width: 100%;
+  height: 100%;
 }
 
 /********************** 반응형 설정 *********************/
@@ -149,6 +153,12 @@ font-family: 'Noto Sans KR', sans-serif;
 }
 
 @media (max-width: 991px) {
+  .weather-wrapper {
+    width: 39%;
+  }
+  .map-wrapper {
+    width: 59%;
+  }
 }
 
 @media (max-width: 767px) {
@@ -172,6 +182,12 @@ font-family: 'Noto Sans KR', sans-serif;
   }
   .header-wrapper h1.title {
     font-size: 2.5em;
+  }
+  .weather-wrapper {
+    width: 100%;
+  }
+  .map-wrapper {
+    display: none;
   }
 }
 
