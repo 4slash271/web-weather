@@ -1,6 +1,14 @@
 /*
 kakao
 0ae3d753b977480d61f51266d65cf7a6
+opemweathermap
+d448bd0f037cc68b858d9cc0c8556118
+
+
+openweathermap.com icon: http://openweathermap.org/img/wn/10d@2x.png
+
+24시간 전 날씨정보: https://api.openweathermap.org/data/2.5/onecall?lat=37.56322905592715&lon=126.98987106691214&exclude=&appid=d448bd0f037cc68b858d9cc0c8556118&units=metric&dt=1620780822
+
 
 */ 
 
@@ -57,8 +65,24 @@ function initBg(){
     };  
     map = new kakao.maps.Map($map[0], options); //지도 생성 및 객체 리턴
     map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN);   
+
+    //윈도우 사이즈가 변경되면 지도 중심 맞추기
+    $(window).resize(onResize).trigger('resize');
+
+    //도시정보 가져오기
+    $.get('../json/city.json', onGetCity);
  }
 /******************************* 이벤트 등록 ******************************/
+function onGetCity(r){
+    var position = new kakao.maps.LatLng(33.450701, 126.570667);  
+    var customOverlay = new kakao.maps.CustomOverlay({
+        position: position,
+        content: content,
+        xAnchor: 0.3,
+        yAnchor: 0.91
+    });
+    customOverlay.setMap(map);
+}
 function onResize(){
     let windowHeight = $(window).innerHeight();
     let lat = (windowHeight > 800 || 600 > windowHeight) ? mapCenter.lat : mapCenter.lat +1.2
@@ -66,6 +90,5 @@ function onResize(){
     map.setLevel(windowHeight > 800 ? 13 : 14)
 
 }
-/******************************* 이벤트 콜백 *****************************/
-$(window).resize(onResize);
 });
+/******************************* 이벤트 콜백 *****************************/
