@@ -141,8 +141,8 @@ font-family: 'Noto Sans KR', sans-serif;
   height: 100%;
 }
 .map-wrapper .co-wrapper {
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #fff;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: #444;
   padding: 0.25em;
   border-radius: 0.25em;
 }

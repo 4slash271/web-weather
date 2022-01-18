@@ -78,9 +78,9 @@ function onGetCity(r){
     r.city.forEach(function(v, i){
        var customOverlay = new kakao.maps.CustomOverlay({
         position: new kakao.maps.LatLng(v.lat, v.lon),
-        content: '<div class="co-wrapper">'+ v.name +'</div>',
-        xAnchor: 0.3,
-        yAnchor: 0.91
+        content: '<div class="co-wrapper '+(v.minimap ? '':"minimap")+'">'+ v.name +'</div>',
+        xAnchor: v.anchor? v.anchor.x :0,
+        yAnchor: v.anchor? v.anchor.y :0,
     });
     customOverlay.setMap(map);   
     })
@@ -90,7 +90,14 @@ function onResize(){
     let windowHeight = $(window).innerHeight();
     let lat = (windowHeight > 800 || 600 > windowHeight) ? mapCenter.lat : mapCenter.lat +1.2
     map.setCenter(new kakao.maps.LatLng(lat, mapCenter.lon))
-    map.setLevel(windowHeight > 800 ? 13 : 14)
+    if(windowHeight < 800){
+        $(".minimap").hide();
+        map.setLevel(14);
+    }
+    else{
+        $(".minimap").show();
+        map.setLevel(13);
+    }
 
 }
 });
