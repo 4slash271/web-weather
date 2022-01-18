@@ -74,14 +74,17 @@ function initBg(){
  }
 /******************************* 이벤트 등록 ******************************/
 function onGetCity(r){
-    var position = new kakao.maps.LatLng(33.450701, 126.570667);  
-    var customOverlay = new kakao.maps.CustomOverlay({
-        position: position,
-        content: content,
+     
+    r.city.forEach(function(v, i){
+       var customOverlay = new kakao.maps.CustomOverlay({
+        position: new kakao.maps.LatLng(v.lat, v.lon),
+        content: '<div class="co-wrapper">'+ v.name +'</div>',
         xAnchor: 0.3,
         yAnchor: 0.91
     });
-    customOverlay.setMap(map);
+    customOverlay.setMap(map);   
+    })
+  
 }
 function onResize(){
     let windowHeight = $(window).innerHeight();
