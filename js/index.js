@@ -101,7 +101,7 @@ function onGetCity(r){
     customOverlay.setMap(map);   
     });
     $('.co-wrapper').mouseenter(onOverlayEnter);
-    $('.co-wrapper').mouseover(onOverlayLeave);
+    $('.co-wrapper').mouseleave(onOverlayLeave);
     $('.co-wrapper').click(onOverlayClick);
     $(window).trigger('resize');
 
@@ -121,13 +121,17 @@ function onResize(){
 
 }
 /******************************* 이벤트 콜백 *****************************/
+function onOverlayClick(){
+    
+}
 function onOverlayEnter(){
-
+    $(this).find('.co-wrap').css('display','flex');
+    $(this).parent().css('z-index', 2);
+    
 }
 function onOverlayLeave(){
-
-}
-function onOverlayClick(){
+    $(this).parent().css('z-index', 0);
+    $(this).find('.co-wrap').css('display',' none');
     
 }
 });
