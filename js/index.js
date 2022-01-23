@@ -32,6 +32,8 @@ let weatherIcon = {
     i13: 'bi-cloud-snow',
     i50: 'bi-cloud-haze',
 }
+let iconPath = 'http://openweathermap.org/img/wn/';
+let defPath = '//via.placeholder.com/40x40/c4f1f1?text=%20';
 let $bgWrapper = $('.bg-wrapper');
 let $map = $('#map');
 /******************************* 사용자 함수 *******************************/
@@ -76,18 +78,13 @@ function onGetCity(r){
      
     r.city.forEach(function(v, i){
         var content ='';
-        content += '<div class="co-wrapper '+(v.minimap ? '':"minimap")+'">';
+        content += '<div class="co-wrapper '+(v.minimap ? '':"minimap")+'" data-lat="'+v.lat+'"data-lon="'+v.lon+'"> ';
         content += '<div class ="co-wrap">';
         content += '<div class ="icon-wrap">';
-        content += '<img src="http://openweathermap.org/img/wn/10d@2x.png" class="w-100">';
+        content += '<img src="'+defPath+'"class="icon w-100">';
         content += '</div>';
         content += '<div class ="temp-wrap">';
-        content += '<div class ="temp-max">';
-        content += '<span>27</span>℃';
-        content += '</div>';
-        content += '<div class ="temp-min">';
-        content += '<span>23</span>℃';
-        content += '</div>';
+        content += '<span class="temp"></span>℃';
         content += '</div>';
         content += '</div>';
         content += v.name;
@@ -127,6 +124,18 @@ function onOverlayClick(){
 function onOverlayEnter(){
     $(this).find('.co-wrap').css('display','flex');
     $(this).parent().css('z-index', 2);
+    let lat = $(this).data('lat');
+    let lon = $(this).data('lon');
+    $.get('https://api.openweathermap.org/data/2.5/weather', {
+        lat:lat,
+        lon:lon, 
+        units:'metric',
+        appid:'d448bd0f037cc68b858d9cc0c8556118'
+    }, function(r){
+        $(this).find('.temp').text(r.main.temp);
+        $(this).find('.icon').attr('src',iconPath + r.weather[0].icon + '@2x.png');
+    }.bind(this));
+    
     
 }
 function onOverlayLeave(){

@@ -157,7 +157,7 @@ font-family: 'Noto Sans KR', sans-serif;
   display: none;
   align-items: center;
   position: absolute;
-  background-color: rgb(205, 243, 253);
+  background-color: #c4f1f1;
   color: #000;
   padding-right: 6px;
   border-radius: 3px;
@@ -171,7 +171,7 @@ font-family: 'Noto Sans KR', sans-serif;
   display: block;
   left: -10px;
   top: calc(50% - 5px);
-  color: rgb(205, 243, 253);
+  color: #c4f1f1;
 }
 .map-wrapper .co-wrapper .co-wrap > .icon-wrap {
   width: 40px;
