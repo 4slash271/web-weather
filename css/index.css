@@ -146,6 +146,13 @@ font-family: 'Noto Sans KR', sans-serif;
   padding: 0.25em;
   border-radius: 0.25em;
 }
+.map-wrapper .co-wrapper:active {
+  background-color: rgba(255, 255, 255, 0.8);
+  font-size: 1.5em;
+}
+.map-wrapper .co-wrapper:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
 /********************** 반응형 설정 *********************/
 @media (max-width: 1399px) {
 }
