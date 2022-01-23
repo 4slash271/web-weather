@@ -67,8 +67,7 @@ function initBg(){
     map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN);   
 
     //윈도우 사이즈가 변경되면 지도 중심 맞추기
-    $(window).resize(onResize).trigger('resize');
-
+     $(window).resize(onResize).trigger('resize');
     //도시정보 가져오기
     $.get('../json/city.json', onGetCity);
  }
@@ -76,15 +75,36 @@ function initBg(){
 function onGetCity(r){
      
     r.city.forEach(function(v, i){
+        var content ='';
+        content += '<div class="co-wrapper '+(v.minimap ? '':"minimap")+'">';
+        content += '<div class ="co-wrap">';
+        content += '<div class ="icon-wrap">';
+        content += '<img src="http://openweathermap.org/img/wn/10d@2x.png" class="w-100">';
+        content += '</div>';
+        content += '<div class ="temp-wrap">';
+        content += '<div class ="temp-max">';
+        content += '<span>27</span>℃';
+        content += '</div>';
+        content += '<div class ="temp-min">';
+        content += '<span>23</span>℃';
+        content += '</div>';
+        content += '</div>';
+        content += '</div>';
+        content += v.name;
+        content += '</div>';
        var customOverlay = new kakao.maps.CustomOverlay({
         position: new kakao.maps.LatLng(v.lat, v.lon),
-        content: '<div class="co-wrapper '+(v.minimap ? '':"minimap")+'">'+ v.name +'</div>',
+        content: content,
         xAnchor: v.anchor? v.anchor.x :0,
         yAnchor: v.anchor? v.anchor.y :0,
     });
     customOverlay.setMap(map);   
-    })
-  
+    });
+    $('.co-wrapper').mouseenter(onOverlayEnter);
+    $('.co-wrapper').mouseover(onOverlayLeave);
+    $('.co-wrapper').click(onOverlayClick);
+    $(window).trigger('resize');
+
 }
 function onResize(){
     let windowHeight = $(window).innerHeight();
@@ -100,5 +120,14 @@ function onResize(){
     }
 
 }
-});
 /******************************* 이벤트 콜백 *****************************/
+function onOverlayEnter(){
+
+}
+function onOverlayLeave(){
+
+}
+function onOverlayClick(){
+    
+}
+});
