@@ -1,0 +1,44 @@
+<script src="../js/jquery-3.5.1.min.js"></script>
+<script>
+    /***********************  vanilla js ***********************/
+    // function onLoad(){
+    //     console.log(this);
+    //     // console.log(this.responseText);
+    //     console.log(JSON.parse(this.responseText));//JSON string->JS object
+    // }
+    
+    // let xhr = new XMLHttpRequest();
+    // xhr.addEventListener('load',onLoad);
+    // // xhr.open('GET','../json/city.json');
+    // xhr.open('GET','https://api.openweathermap.org/data/2.5/onecall?lat=37.56322905592715&lon=126.98987106691214&exclude=&appid=d448bd0f037cc68b858d9cc0c8556118&units=metric&dt=1620780822');
+    
+    // xhr.send();
+    
+    
+    /*********************** get  ***********************/
+    // $.get('https://api.openweathermap.org/data/2.5/weather', {
+    //     lat:37.563,
+    //     lon: 126.98,
+    //     appid:'d448bd0f037cc68b858d9cc0c8556118',
+    //     units:'metric'
+    // },onLoad);
+    function onLoad(r){
+        console.log(r);
+    }
+    function onError(xhr, status, msg){
+        console.log(xhr,status, msg);
+    }
+    
+    /*********************** ajax  ***********************/
+    $.ajax('https://api.openweathermap.org/data/2.5/weather', {
+        type: 'GET',
+        lat:37.563,
+        lon: 126.98,
+        appid:'d448bd0f037cc68b858d9cc0c8556118',
+        units:'metric',
+        success:onLoad,
+        error:onError
+    });
+
+
+</script>

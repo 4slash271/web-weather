@@ -32,6 +32,10 @@ let weatherIcon = {
     i13: 'bi-cloud-snow',
     i50: 'bi-cloud-haze',
 }
+let dailyURL = 'https://api.openweathermap.org/data/2.5/weather';
+let weeklyURL = 'https://api.openweathermap.org/data/2.5/forecast';
+let appid ='d448bd0f037cc68b858d9cc0c8556118';
+let sendData = {appid: appid, units:'metric'};
 let iconPath = 'http://openweathermap.org/img/wn/';
 let defPath = '//via.placeholder.com/40x40/c4f1f1?text=%20';
 let $bgWrapper = $('.bg-wrapper');
@@ -72,6 +76,10 @@ function initBg(){
      $(window).resize(onResize).trigger('resize');
     //도시정보 가져오기
     $.get('../json/city.json', onGetCity);
+ }
+ //openweathermap에서 icon 가져오기
+ function getIcon(icon){
+     return iconPath +icon + '@2x.png';
  }
 /******************************* 이벤트 등록 ******************************/
 function onGetCity(r){
@@ -122,25 +130,22 @@ function onOverlayClick(){
     
 }
 function onOverlayEnter(){
+    //this=> .co-wrapper중 클릭된 것
     $(this).find('.co-wrap').css('display','flex');
-    $(this).parent().css('z-index', 2);
-    let lat = $(this).data('lat');
-    let lon = $(this).data('lon');
-    $.get('https://api.openweathermap.org/data/2.5/weather', {
-        lat:lat,
-        lon:lon, 
-        units:'metric',
-        appid:'d448bd0f037cc68b858d9cc0c8556118'
-    }, function(r){
+    $(this).parent().css('z-index', 1);
+    sendData.lat = $(this).data('lat');
+    sendData.lon = $(this).data('lon');
+    $.get(dailyURL,sendData, onLoad.bind(this));
+    function onLoad(r){
         $(this).find('.temp').text(r.main.temp);
-        $(this).find('.icon').attr('src',iconPath + r.weather[0].icon + '@2x.png');
-    }.bind(this));
-    
-    
+        $(this).find('.icon').attr('src',getIcon(r.weather[0].icon));
+        
+    }
 }
 function onOverlayLeave(){
     $(this).parent().css('z-index', 0);
     $(this).find('.co-wrap').css('display',' none');
     
 }
+
 });
