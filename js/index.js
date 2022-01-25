@@ -1,6 +1,6 @@
 /*
 kakao
-0ae3d753b977480d61f51266d65cf7a6
+bee6546e2c854d1ebb4f340f8d231f9f
 opemweathermap
 d448bd0f037cc68b858d9cc0c8556118
 
@@ -103,11 +103,13 @@ function onGetCity(r){
         xAnchor: v.anchor? v.anchor.x :0,
         yAnchor: v.anchor? v.anchor.y :0,
     });
+    console.log(customOverlay.a);
     customOverlay.setMap(map);   
+    $(customOverlay.a).mouseenter(onOverlayEnter);
+    $(customOverlay.a).mouseleave(onOverlayLeave);
+    $(customOverlay.a).click(onOverlayClick);
     });
-    $('.co-wrapper').mouseenter(onOverlayEnter);
-    $('.co-wrapper').mouseleave(onOverlayLeave);
-    $('.co-wrapper').click(onOverlayClick);
+    
     $(window).trigger('resize');
 
 }
@@ -130,11 +132,11 @@ function onOverlayClick(){
     
 }
 function onOverlayEnter(){
-    //this=> .co-wrapper중 클릭된 것
+    //this=> .co-wrapper중 호버된 것의 부모
     $(this).find('.co-wrap').css('display','flex');
-    $(this).parent().css('z-index', 1);
-    sendData.lat = $(this).data('lat');
-    sendData.lon = $(this).data('lon');
+    $(this).css('z-index', 1);
+    sendData.lat = $(this).find('.co-wrapper').data('lat');
+    sendData.lon = $(this).find('.co-wrapper').data('lon');
     $.get(dailyURL,sendData, onLoad.bind(this));
     function onLoad(r){
         $(this).find('.temp').text(r.main.temp);
@@ -143,7 +145,7 @@ function onOverlayEnter(){
     }
 }
 function onOverlayLeave(){
-    $(this).parent().css('z-index', 0);
+    $(this).css('z-index', 0);
     $(this).find('.co-wrap').css('display',' none');
     
 }
