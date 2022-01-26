@@ -2,7 +2,7 @@
 kakao
 bee6546e2c854d1ebb4f340f8d231f9f
 opemweathermap
-d448bd0f037cc68b858d9cc0c8556118
+df79ca72c06b8286f455e64a4e2c65e4
 
 
 openweathermap.com icon: http://openweathermap.org/img/wn/10d@2x.png
@@ -32,10 +32,11 @@ let weatherIcon = {
     i13: 'bi-cloud-snow',
     i50: 'bi-cloud-haze',
 }
-let dailyURL = 'https://api.openweathermap.org/data/2.5/weather';
+let todayURL = 'https://api.openweathermap.org/data/2.5/onecall';
 let weeklyURL = 'https://api.openweathermap.org/data/2.5/forecast';
-let appid ='d448bd0f037cc68b858d9cc0c8556118';
-let sendData = {appid: appid, units:'metric'};
+let yesterdayURL = 'https://api.openweathermap.org/data/2.5/onecall/timemachine';
+let appid ="df79ca72c06b8286f455e64a4e2c65e4"
+let sendData = {appid:appid, units:'metric', lang:'kr'};
 let iconPath = 'http://openweathermap.org/img/wn/';
 let defPath = '//via.placeholder.com/40x40/c4f1f1?text=%20';
 let $bgWrapper = $('.bg-wrapper');
@@ -45,6 +46,7 @@ init();
 function init(){
    initBg();
    initMap();
+   initWeather();
 }
 function initBg(){
      let d = new Date();
@@ -77,13 +79,45 @@ function initBg(){
     //도시정보 가져오기
     $.get('../json/city.json', onGetCity);
  }
+ function initWeather(){
+     navigator.geolocation.getCurrentPosition(onSuccess, onError);
+     function onSuccess(r){
+         var data = JSON.parse(JSON.stringify(sendData));
+         console.log(r);
+         data.lat = r.coords.latitude;
+         data.lon = r.coords.longitude;
+         $.get(todayURL, data, onToday);
+         $.get(weeklyURL, data, onWeekly);
+   
+
+     }
+     function onError(err){
+         console.log(err);
+
+     }
+  
+ }
  //openweathermap에서 icon 가져오기
  function getIcon(icon){
      return iconPath +icon + '@2x.png';
  }
-/******************************* 이벤트 등록 ******************************/
+ /******************************* 이벤트 콜백 *****************************/
+ function onToday(r){
+     var data = JSON.parse(JSON.stringify(sendData));
+     console.log(r);
+     var lat = r.coord.lat;
+     var lon = r.coord.lon;
+     data.dt = r.dt - 84600;
+     $.get(yesterdayURL,data, onYesterday );
+     function onYesterday(){
+         
+    }
+}
+function onWeekly(){
+    
+}
 function onGetCity(r){
-     
+    
     r.city.forEach(function(v, i){
         var content ='';
         content += '<div class="co-wrapper '+(v.minimap ? '':"minimap")+'" data-lat="'+v.lat+'"data-lon="'+v.lon+'"> ';
@@ -97,21 +131,20 @@ function onGetCity(r){
         content += '</div>';
         content += v.name;
         content += '</div>';
-       var customOverlay = new kakao.maps.CustomOverlay({
-        position: new kakao.maps.LatLng(v.lat, v.lon),
-        content: content,
-        xAnchor: v.anchor? v.anchor.x :0,
-        yAnchor: v.anchor? v.anchor.y :0,
-    });
-    console.log(customOverlay.a);
-    customOverlay.setMap(map);   
-    $(customOverlay.a).mouseenter(onOverlayEnter);
-    $(customOverlay.a).mouseleave(onOverlayLeave);
-    $(customOverlay.a).click(onOverlayClick);
+        var customOverlay = new kakao.maps.CustomOverlay({
+            position: new kakao.maps.LatLng(v.lat, v.lon),
+            content: content,
+            xAnchor: v.anchor? v.anchor.x :0,
+            yAnchor: v.anchor? v.anchor.y :0,
+        });
+        customOverlay.setMap(map);   
+        $(customOverlay.a).mouseenter(onOverlayEnter);
+        $(customOverlay.a).mouseleave(onOverlayLeave);
+        $(customOverlay.a).click(onOverlayClick);
     });
     
     $(window).trigger('resize');
-
+    
 }
 function onResize(){
     let windowHeight = $(window).innerHeight();
@@ -125,9 +158,10 @@ function onResize(){
         $(".minimap").show();
         map.setLevel(13);
     }
-
+    
 }
-/******************************* 이벤트 콜백 *****************************/
+
+/******************************* 이벤트 등록 ******************************/
 function onOverlayClick(){
     
 }
@@ -135,9 +169,10 @@ function onOverlayEnter(){
     //this=> .co-wrapper중 호버된 것의 부모
     $(this).find('.co-wrap').css('display','flex');
     $(this).css('z-index', 1);
-    sendData.lat = $(this).find('.co-wrapper').data('lat');
-    sendData.lon = $(this).find('.co-wrapper').data('lon');
-    $.get(dailyURL,sendData, onLoad.bind(this));
+    var data = JSON.parse(JSON.stringify(sendData));
+    data.lat = $(this).find('.co-wrapper').data('lat');
+    data.lon = $(this).find('.co-wrapper').data('lon');
+    $.get(todayURL,sendData, onLoad.bind(this));
     function onLoad(r){
         $(this).find('.temp').text(r.main.temp);
         $(this).find('.icon').attr('src',getIcon(r.weather[0].icon));
