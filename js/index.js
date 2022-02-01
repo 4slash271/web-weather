@@ -105,8 +105,8 @@ function initBg(){
  function onToday(r){
      var data = JSON.parse(JSON.stringify(sendData));
      console.log(r);
-     var lat = r.coord.lat;
-     var lon = r.coord.lon;
+     var lat = r.lat;
+     var lon = r.lon;
      data.dt = r.dt - 84600;
      $.get(yesterdayURL,data, onYesterday );
      function onYesterday(){
