@@ -32,7 +32,7 @@ let weatherIcon = {
     i13: 'bi-cloud-snow',
     i50: 'bi-cloud-haze',
 }
-let todayURL = 'https://api.openweathermap.org/data/2.5/onecall';
+let todayURL = 'https://api.openweathermap.org/data/2.5/weather';
 let weeklyURL = 'https://api.openweathermap.org/data/2.5/forecast';
 let yesterdayURL = 'https://api.openweathermap.org/data/2.5/onecall/timemachine';
 let sendData = {appid:'df79ca72c06b8286f455e64a4e2c65e4', units:'metric', lang:'kr'};
@@ -103,30 +103,46 @@ function initBg(){
  }
  /******************************* 이벤트 콜백 *****************************/
  function onToday(r){
-     var data = JSON.parse(JSON.stringify(sendData));
      console.log(r);
-     data.lat = r.lat;
-     data.lon = r.lon;
+     var $wrapper = $('.weather-wrapper');
+     var $title = $wrapper.find('.title-wrap');
+     var $summery = $wrapper.find('.summery-wrap');
+     var $desc = $wrapper.find('.desc-wrap');
+     var $icon = $wrapper.find('.icon-wrap');
+     $title.find('.name').text(r.name + ',KR');
+     $title.find('.time').text(moment(r.dt*1000).format('hh시 mm분 기준'));
+     $summery.text(r.weather[0].description);
+     $desc.find('.temp .current-temp').text(r.main.temp);
+     $desc.find('.temp-gap .max').text(r.main.temp_max);
+     $desc.find('.temp-gap .min').text(r.main.temp_min);
+     $icon.find('img').attr('src',getIcon(r.weather[0].icon));
+
+
+     var data = JSON.parse(JSON.stringify(sendData));
+     data.lat = r.coord.lat;
+     data.lon = r.coord.lon;
      console.log(data.lat);
      console.log(data.lon);
-     data.dt = r.current.dt - 84600;
-     console.log(r.current.dt);
+     data.dt = r.dt - 84600;
+
+
+     console.log(r.dt);
      console.log(data.dt);
      $.get(yesterdayURL,data, onYesterday );
      function onYesterday(r2){
          console.log(r2);
-         var gap = (r.current.temp - r2.current.temp).toFixed(1);
+         var gap = (r.main.temp - r2.current.temp).toFixed(1);
          if(gap === 0){
-             $('.temp-desc .josa').text('와');
-             $('.temp-desc .gap').hide();
-             $('.temp-desc .desc').text('같아요');
+            $desc.find('.temp-desc .josa').text('와');
+            $desc.find('.temp-desc .gap').hide();
+            $desc.find('.temp-desc .desc').text('같아요');
 
          }
          else{
-            $('.temp-desc .josa').text('보다');
-            $('.temp-desc .gap').show();
-            $('.temp-desc .gap .gap-temp').text(Math.abs(gap));
-            $('.temp-desc .desc').text((gap > 0)? '높아요':'낮아요');
+           $desc.find('.temp-desc .josa').text('보다');
+           $desc.find('.temp-desc .gap').show();
+           $desc.find('.temp-desc .gap .gap-temp').text(Math.abs(gap));
+           $desc.find('.temp-desc .desc').text((gap > 0)? '높아요':'낮아요');
          }
          console.log(gap);
     }
@@ -162,8 +178,8 @@ function onGetCity(r){
         $(customOverlay.a).mouseleave(onOverlayLeave);
         $(customOverlay.a).click(onOverlayClick);
 
-        var html = '<li class="city '+(v.title ? 'title' : '')+'" data-lat="' + v.lat + '" data-lon="' + v.lon + '">'+v.name+'</li>';
-			$('.weather-wrapper .city-wrap').append(html);
+        // var html = '<li class="city '+(v.title ? 'title' : '')+'" data-lat="' + v.lat + '" data-lon="' + v.lon + '">'+v.name+'</li>';
+		// 	$('.weather-wrapper .city-wrap').append(html);
     });
     
     $(window).trigger('resize');
@@ -198,8 +214,8 @@ function onOverlayEnter(){
     $.get(todayURL,data, onLoad.bind(this));
     function onLoad(r){
         console.log(r);
-        $(this).find('.temp').text(r.current.temp);
-        $(this).find('.icon').attr('src',getIcon(r.current.weather[0].icon));
+        $(this).find('.temp').text(r.main.temp);
+        $(this).find('.icon').attr('src',getIcon(r.weather[0].icon));
         
     }
 }

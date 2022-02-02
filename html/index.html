@@ -16,6 +16,7 @@
 	<script src="../js/jquery-3.6.0.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
 	<script src="../js/slick.min.js"></script>
+    <script src="../js/moment.min.js"></script>
 
 </head>
 <body>
@@ -34,11 +35,12 @@
                     <section class="weather-wrapper">
                             <div class="title-wrap">
                                 <h3 class="position">현재위치</h3>
-                                <h2 class="name">Seoul, KR</h2>
-                                <h4 class="time">14:22 기준</h4>
+                                <h2 class="name"></h2>
+                                <h4 class="time"></h4>
                             </div>
+                            <div class="summery-wrap"></div>
                             <div class="icon-wrap">
-                                <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="icon" class="mw-100">
+                                <img src="" alt="icon" class="mw-100">
                             </div>
                             <div class="desc-wrap">
                                 <div class="temp-wrap">
@@ -53,11 +55,11 @@
                                         <span class="desc"></span>
                                     </div>
                                     <div class="temp">
-                                        <span></span><sup>o</sup>C
+                                        <span class="current-temp"></span><sup>o</sup>C
                                     </div>
                                     <div class="temp-gap">
-                                        최고: <span>25</span><sup>o</sup>C
-                                        최저: <span>18</span><sup>o</sup>C
+                                        최고: <span class="max"></span><sup>o</sup>C
+                                        최저: <span class="min"></span><sup>o</sup>C
                                     </div>
                                 </div>
                             </div>
