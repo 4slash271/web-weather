@@ -202,6 +202,10 @@ function onResize(){
 
 /******************************* 이벤트 등록 ******************************/
 function onOverlayClick(){
+    var data = JSON.parse(JSON.stringify(sendData));
+    data.lat = $(this).find('.co-wrapper').data('lat');
+    data.lon = $(this).find('.co-wrapper').data('lon');
+    $.get(todayURL, data, onToday);
   
 }
 function onOverlayEnter(){
