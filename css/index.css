@@ -161,7 +161,7 @@ font-family: 'Noto Sans KR', sans-serif;
 .weather-wrapper .temp-wrap .temp {
   font-size: 1.5em;
 }
-.weather-wrapper .temp-wrap .temp-desc .gap {
+.weather-wrapper .temp-wrap .temp-desc .gap > span {
   font-size: 1.25em;
   font-weight: bolder;
 }

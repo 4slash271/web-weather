@@ -35,8 +35,7 @@ let weatherIcon = {
 let todayURL = 'https://api.openweathermap.org/data/2.5/onecall';
 let weeklyURL = 'https://api.openweathermap.org/data/2.5/forecast';
 let yesterdayURL = 'https://api.openweathermap.org/data/2.5/onecall/timemachine';
-let appid ="df79ca72c06b8286f455e64a4e2c65e4"
-let sendData = {appid:appid, units:'metric', lang:'kr'};
+let sendData = {appid:'df79ca72c06b8286f455e64a4e2c65e4', units:'metric', lang:'kr'};
 let iconPath = 'http://openweathermap.org/img/wn/';
 let defPath = '//via.placeholder.com/40x40/c4f1f1?text=%20';
 let $bgWrapper = $('.bg-wrapper');
@@ -82,18 +81,19 @@ function initBg(){
  function initWeather(){
      navigator.geolocation.getCurrentPosition(onSuccess, onError);
      function onSuccess(r){
-         var data = JSON.parse(JSON.stringify(sendData));
          console.log(r);
-         data.lat = r.coords.latitude;
-         data.lon = r.coords.longitude;
+         console.log(r.coords.latitude);
+         var lat = r.coords.latitude;
+         var lon = r.coords.longitude;
+         var data = JSON.parse(JSON.stringify(sendData));
+         data.lat = lat;
+         data.lon = lon;
          $.get(todayURL, data, onToday);
          $.get(weeklyURL, data, onWeekly);
-   
 
      }
      function onError(err){
          console.log(err);
-
      }
   
  }
@@ -105,18 +105,38 @@ function initBg(){
  function onToday(r){
      var data = JSON.parse(JSON.stringify(sendData));
      console.log(r);
-     var lat = r.lat;
-     var lon = r.lon;
-     data.dt = r.dt - 84600;
+     data.lat = r.lat;
+     data.lon = r.lon;
+     console.log(data.lat);
+     console.log(data.lon);
+     data.dt = r.current.dt - 84600;
+     console.log(r.current.dt);
+     console.log(data.dt);
      $.get(yesterdayURL,data, onYesterday );
-     function onYesterday(){
-         
+     function onYesterday(r2){
+         console.log(r2);
+         var gap = (r.current.temp - r2.current.temp).toFixed(1);
+         if(gap === 0){
+             $('.temp-desc .josa').text('와');
+             $('.temp-desc .gap').hide();
+             $('.temp-desc .desc').text('같아요');
+
+         }
+         else{
+            $('.temp-desc .josa').text('보다');
+            $('.temp-desc .gap').show();
+            $('.temp-desc .gap .gap-temp').text(Math.abs(gap));
+            $('.temp-desc .desc').text((gap > 0)? '높아요':'낮아요');
+         }
+         console.log(gap);
     }
 }
-function onWeekly(){
+function onWeekly(r){
+    console.log(r);
     
 }
 function onGetCity(r){
+    console.log(r);
     
     r.city.forEach(function(v, i){
         var content ='';
@@ -141,6 +161,9 @@ function onGetCity(r){
         $(customOverlay.a).mouseenter(onOverlayEnter);
         $(customOverlay.a).mouseleave(onOverlayLeave);
         $(customOverlay.a).click(onOverlayClick);
+
+        var html = '<li class="city '+(v.title ? 'title' : '')+'" data-lat="' + v.lat + '" data-lon="' + v.lon + '">'+v.name+'</li>';
+			$('.weather-wrapper .city-wrap').append(html);
     });
     
     $(window).trigger('resize');
@@ -163,7 +186,7 @@ function onResize(){
 
 /******************************* 이벤트 등록 ******************************/
 function onOverlayClick(){
-    
+  
 }
 function onOverlayEnter(){
     //this=> .co-wrapper중 호버된 것의 부모
@@ -172,10 +195,11 @@ function onOverlayEnter(){
     var data = JSON.parse(JSON.stringify(sendData));
     data.lat = $(this).find('.co-wrapper').data('lat');
     data.lon = $(this).find('.co-wrapper').data('lon');
-    $.get(todayURL,sendData, onLoad.bind(this));
+    $.get(todayURL,data, onLoad.bind(this));
     function onLoad(r){
-        $(this).find('.temp').text(r.main.temp);
-        $(this).find('.icon').attr('src',getIcon(r.weather[0].icon));
+        console.log(r);
+        $(this).find('.temp').text(r.current.temp);
+        $(this).find('.icon').attr('src',getIcon(r.current.weather[0].icon));
         
     }
 }
