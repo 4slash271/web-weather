@@ -192,6 +192,9 @@ font-family: 'Noto Sans KR', sans-serif;
   padding: 0.25em;
   border-radius: 0.25em;
 }
+.map-wrapper .co-wrapper.click {
+  background-color: rgb(255, 136, 0);
+}
 .map-wrapper .co-wrapper.active {
   font-size: 0.75em;
 }
