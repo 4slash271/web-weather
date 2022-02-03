@@ -85,7 +85,7 @@ function initBg(){
          console.log(r.coords.latitude);
          var lat = r.coords.latitude;
          var lon = r.coords.longitude;
-         var data = JSON.parse(JSON.stringify(sendData));
+         var data = cloneObject(sendData);
          data.lat = lat;
          data.lon = lon;
          $.get(todayURL, data, onToday);
@@ -93,7 +93,11 @@ function initBg(){
 
      }
      function onError(err){
-         console.log(err);
+        var data = cloneObject(sendData);
+        data.lat = 37.563229;
+        data.lon = 126.989871;
+        $.get(todayURL, data, onToday);
+        $.get(weeklyURL, data, onWeekly);
      }
   
  }
@@ -118,7 +122,7 @@ function initBg(){
      $icon.find('img').attr('src',getIcon(r.weather[0].icon));
 
 
-     var data = JSON.parse(JSON.stringify(sendData));
+     var data = cloneObject(sendData);
      data.lat = r.coord.lat;
      data.lon = r.coord.lon;
      console.log(data.lat);
@@ -148,8 +152,33 @@ function initBg(){
     }
 }
 function onWeekly(r){
-    console.log(r);
-    
+    var $slick = $('.weather-wrapper .slide-wrapper');
+    var $btPrev = $('.weather-wrapper .weekly-wrapper .bt-slide.left');
+    var $btNext = $('.weather-wrapper .weekly-wrapper .bt-slide.right');
+    var slick = {
+        autoplay: true,
+        autoplaySpeed: 2000,
+        infinite: true,
+        touchThreshold: 10,
+        arrows: false,
+        dots: false,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        responsive: [
+          {
+            breakpoint: 1200,
+            settings: {
+              slidesToShow: 3
+            }
+          }
+          // You can unslick at a given breakpoint now by adding:
+          // settings: "unslick"
+          // instead of a settings object
+        ]
+      }; 
+      $('.weather-wrapper .slide-wrapper').slick(slick);
+      makeSlickButton($slick, $btPrev, $btNext);
 }
 function onGetCity(r){
     console.log(r);
@@ -202,7 +231,7 @@ function onResize(){
 
 /******************************* 이벤트 등록 ******************************/
 function onOverlayClick(){
-    var data = JSON.parse(JSON.stringify(sendData));
+    var data = cloneObject(sendData);
     data.lat = $(this).find('.co-wrapper').data('lat');
     data.lon = $(this).find('.co-wrapper').data('lon');
     $.get(todayURL, data, onToday);
@@ -214,7 +243,7 @@ function onOverlayEnter(){
     //this=> .co-wrapper중 호버된 것의 부모
     $(this).find('.co-wrap').css('display','flex');
     $(this).css('z-index', 1);
-    var data = JSON.parse(JSON.stringify(sendData));
+    var data = cloneObject(sendData);
     data.lat = $(this).find('.co-wrapper').data('lat');
     data.lon = $(this).find('.co-wrapper').data('lon');
     $.get(todayURL,data, onLoad.bind(this));
