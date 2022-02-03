@@ -88,7 +88,6 @@ font-family: 'Noto Sans KR', sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: stretch;
-  border: 5px solid red;
 }
 
 /********************** Header *********************/
@@ -126,52 +125,61 @@ font-family: 'Noto Sans KR', sans-serif;
 /********************** Weather *********************/
 .weather-wrapper {
   display: flex;
+  flex-direction: column;
+  width: 49%;
+  background-color: rgba(0, 0, 0, 0.15);
+  color: #fff;
+  line-height: 1.5;
+}
+.weather-wrapper .daily-wrapper {
+  display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  width: 49%;
-  background-color: rgba(0, 0, 0, 0.25);
-  color: #fff;
-  line-height: 1.5;
+  flex-grow: 1;
 }
-.weather-wrapper .title-wrap {
+.weather-wrapper .daily-wrapper .title-wrap {
   font-size: 1.5em;
 }
-.weather-wrapper .title-wrap h3.position {
+.weather-wrapper .daily-wrapper .title-wrap h3.position {
   font-size: 0.875em;
 }
-.weather-wrapper .title-wrap h2.name {
+.weather-wrapper .daily-wrapper .title-wrap h2.name {
   font-size: 1.5em;
   border-bottom: 2px solid #fff;
   margin-bottom: 0.25em;
 }
-.weather-wrapper .title-wrap h4.time {
+.weather-wrapper .daily-wrapper .title-wrap h4.time {
   font-size: 0.75em;
   font-weight: lighter;
 }
 
-.weather-wrapper .summary-wrap {
+.weather-wrapper .daily-wrapper .summary-wrap {
   font-size: 2em;
 }
 
-.weather-wrapper .temp-wrap {
+.weather-wrapper .daily-wrapper .temp-wrap {
   font-weight: lighter;
 }
-.weather-wrapper .temp-wrap .temp {
+.weather-wrapper .daily-wrapper .temp-wrap .temp {
   font-size: 1.5em;
 }
-.weather-wrapper .temp-wrap .temp-desc .gap > span {
+.weather-wrapper .daily-wrapper .temp-wrap .temp-desc .gap > span {
   font-size: 1.25em;
   font-weight: bolder;
 }
-.weather-wrapper .temp-wrap .temp span {
+.weather-wrapper .daily-wrapper .temp-wrap .temp span {
   font-weight: normal;
   font-size: 2em;
 }
-.weather-wrapper .temp-wrap .temp-gap span {
+.weather-wrapper .daily-wrapper .temp-wrap .temp-gap span {
   font-weight: normal;
   font-size: 1.25em;
+}
+.weather-wrapper .weekly-wrapper {
+  height: 150px;
+  border-top: 1px solid rgba(255, 255, 255, 0.151);
 }
 /************************ Map ************************/
 .map-wrapper {
