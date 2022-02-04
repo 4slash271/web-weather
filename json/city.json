@@ -363,6 +363,7 @@
       "minimap": false,
       "anchor": 0
     },
+    { "name": "제주도", "title": true },
     {
       "name": "제주",
       "lon": 126.5,

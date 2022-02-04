@@ -232,17 +232,15 @@ function onGetCity(r){
         $(customOverlay.a).mouseleave(onOverlayLeave);
         $(customOverlay.a).click(onOverlayClick);
 
-        // var html = '<li class="city '+(v.title ? 'title' : '')+'" data-lat="' + v.lat + '" data-lon="' + v.lon + '">'+v.name+'</li>';
-		// 	$('.weather-wrapper .city-wrap').append(html);
 
 
-
-        var html = '<li class = "city' +(v.title ? ' title':'')+'">'+v.name+'</li>';
+        var html = '<li class = "city '+(v.title ? 'title':'')+'" data-lat="'+v.lat+'" data-lon="'+v.lon+'" >'+v.name+'</li>';
         $('.weather-wrapper .city-wrapper .city-wrap').append(html);
 
 
     });
-
+    
+    $('.weather-wrapper .city-wrapper .city-wrap .city').click(onCityClick);
 
     $(window).trigger('resize');
     
@@ -280,6 +278,16 @@ function makeSlickButton($slick, $prev, $next) {
 
 
 /******************************* 이벤트 등록 ******************************/
+function onCityClick(){
+    var data = cloneObject(sendData);
+    data.lat = $(this).data('lat');
+    data.lon = $(this).data('lon');
+    $('.weather-wrapper .city-wrapper').hide();
+    $.get(todayURL, data, onToday);
+    $.get(weeklyURL, data, onWeekly);
+
+
+}
 function onOverlayClick(){
     var data = cloneObject(sendData);
     data.lat = $(this).find('.co-wrapper').data('lat');

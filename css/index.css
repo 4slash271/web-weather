@@ -250,12 +250,17 @@ font-family: 'Noto Sans KR', sans-serif;
   font-size: 0.875em;
   border: 1px solid rgba(214, 214, 214, 0.336);
   margin-top: -1px;
+  cursor: pointer;
 }
 .weather-wrapper .city-wrapper .city-wrap .city.title {
   width: 100%;
   border: none;
   font-size: 1.125em;
   padding-top: 0.75em;
+  cursor: auto;
+}
+.weather-wrapper .city-wrapper .city-wrap .city:not(.title):hover {
+  background-color: rgba(204, 204, 204, 0.705);
 }
 /************************ Map ************************/
 .map-wrapper {
