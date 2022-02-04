@@ -234,8 +234,16 @@ function onGetCity(r){
 
         // var html = '<li class="city '+(v.title ? 'title' : '')+'" data-lat="' + v.lat + '" data-lon="' + v.lon + '">'+v.name+'</li>';
 		// 	$('.weather-wrapper .city-wrap').append(html);
+
+
+
+        var html = '<li class = "city' +(v.title ? ' title':'')+'">'+v.name+'</li>';
+        $('.weather-wrapper .city-wrapper .city-wrap').append(html);
+
+
     });
-    
+
+
     $(window).trigger('resize');
     
 }
@@ -251,6 +259,7 @@ function onResize(){
         $(".minimap").show();
         map.setLevel(13);
     }
+    $('.weather-wrapper .city-wrapper').hide();
     
     
 }
@@ -301,5 +310,8 @@ function onOverlayLeave(){
     $(this).find('.co-wrap').css('display',' none');
     
 }
+$('.bt-city').click(function(){
+    $('.weather-wrapper .city-wrapper').toggle();
+})
 
 });

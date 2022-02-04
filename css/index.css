@@ -116,6 +116,7 @@ font-family: 'Noto Sans KR', sans-serif;
 /********************** Header *********************/
 .header-wrapper {
   flex-grow: 0;
+  position: relative;
 }
 .header-wrapper h1.title {
   display: flex;
@@ -125,7 +126,9 @@ font-family: 'Noto Sans KR', sans-serif;
   color: #fff;
   letter-spacing: 0.05em;
   margin: 1em 0 0.5em 0;
+  position: relative;
 }
+
 .header-wrapper h1.title > span {
   margin-right: 0.325em;
   opacity: 0.75;
@@ -137,6 +140,15 @@ font-family: 'Noto Sans KR', sans-serif;
   height: 3px;
   margin: auto;
   background-color: rgba(255, 255, 255, 0.5);
+}
+.header-wrapper .bt-city {
+  font-size: 2em;
+  color: #fff;
+  position: absolute;
+  bottom: 1.2em;
+  right: 1.2em;
+  cursor: pointer;
+  display: none;
 }
 /*************** Container-wrapper ******************/
 .container-wrapper {
@@ -153,6 +165,7 @@ font-family: 'Noto Sans KR', sans-serif;
   background-color: rgba(0, 0, 0, 0.15);
   color: #fff;
   line-height: 1.5;
+  position: relative;
 }
 .weather-wrapper .daily-wrapper {
   display: flex;
@@ -213,6 +226,36 @@ font-family: 'Noto Sans KR', sans-serif;
   align-items: center;
   font-weight: bolder;
   margin-top: 0.75em;
+}
+.weather-wrapper .city-wrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.705);
+  display: none;
+  z-index: 99;
+  overflow-y: auto;
+}
+.weather-wrapper .city-wrapper .city-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-x: hidden;
+}
+.weather-wrapper .city-wrapper .city-wrap .city {
+  padding: 1em 1.5em;
+  width: 16.66%;
+  text-align: center;
+  font-size: 0.875em;
+  border: 1px solid rgba(214, 214, 214, 0.336);
+  margin-top: -1px;
+}
+.weather-wrapper .city-wrapper .city-wrap .city.title {
+  width: 100%;
+  border: none;
+  font-size: 1.125em;
+  padding-top: 0.75em;
 }
 /************************ Map ************************/
 .map-wrapper {
@@ -313,10 +356,20 @@ font-family: 'Noto Sans KR', sans-serif;
   .map-wrapper {
     display: none;
   }
+  .header-wrapper .bt-city {
+    display: flex;
+    bottom: 1.5em;
+    font-size: 1.5em;
+  }
 }
 
 @media (max-width: 575px) {
   .header-wrapper h1.title {
     font-size: 1.75em;
+  }
+  .header-wrapper .bt-city {
+    display: flex;
+    bottom: 1.5em;
+    font-size: 1.2em;
   }
 }
