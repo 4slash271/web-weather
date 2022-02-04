@@ -46,6 +46,7 @@ function init(){
    initBg();
    initMap();
    initWeather();
+
 }
 function initBg(){
      let d = new Date();
@@ -68,10 +69,14 @@ function initBg(){
         center: new kakao.maps.LatLng(mapCenter.lat, mapCenter.lon), //지도의 중심좌표.
         level: 13, //지도의 레벨(확대, 축소 정도),
         draggable: false,
-        zommable:false
+        zommable:false,
+        disableDoubleClickZoom:true,
     };  
     map = new kakao.maps.Map($map[0], options); //지도 생성 및 객체 리턴
-    map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN);   
+    map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN); 
+    kakao.maps.event.addListener(map, 'dbclick', function(e){
+        e.preventDefault();
+    })  
 
     //윈도우 사이즈가 변경되면 지도 중심 맞추기
      $(window).resize(onResize).trigger('resize');
@@ -101,9 +106,11 @@ function initBg(){
      }
   
  }
+
  //openweathermap에서 icon 가져오기
- function getIcon(icon){
-     return iconPath +icon + '@2x.png';
+ function getIcon(icon, notZoom){
+     
+     return iconPath +icon + (notZoom ? '.png' : '@2x.png');
  }
  /******************************* 이벤트 콜백 *****************************/
  function onToday(r){
@@ -151,17 +158,16 @@ function initBg(){
          console.log(gap);
     }
 }
-function onWeekly(r){
+function onWeekly(r){//이번 주 날씨
+    console.log(r);
+    var html ="";
+    var $stage = $('.weather-wrapper .slide-stage');
     var $slick = $('.weather-wrapper .slide-wrapper');
     var $btPrev = $('.weather-wrapper .weekly-wrapper .bt-slide.left');
     var $btNext = $('.weather-wrapper .weekly-wrapper .bt-slide.right');
     var slick = {
-        autoplay: true,
-        autoplaySpeed: 2000,
-        infinite: true,
         touchThreshold: 10,
         arrows: false,
-        dots: false,
         speed: 500,
         slidesToShow: 4,
         slidesToScroll: 1,
@@ -177,9 +183,28 @@ function onWeekly(r){
           // instead of a settings object
         ]
       }; 
-      $('.weather-wrapper .slide-wrapper').slick(slick);
-      makeSlickButton($slick, $btPrev, $btNext);
+    
+    r.list.forEach(function(v){
+        html += '<div class="slide">'
+        html += '<div class="date-wrap">'+ moment(v.dt*1000).format('D일 h시')+'</div>'
+        html += '<div class="img-wrap">'
+        html += '<img src=" '+getIcon(v.weather[0].icon, true)+'" alt="icon" class="mw-100">'//날씨 아이콘 가져오기
+        html += '</div>'
+        html += '<div class="temp-wrap">'
+        html += '<div class="temp">'
+        html += '<span class="current-temp">'+v.main.temp+'</span><sup>o</sup>C'//온도
+        html += '</div>'
+        html += '</div>'
+        html += '</div>'
+    });
+    if($('.slick-list').length) $slick.slick('unslick');
+    $slick.html(html);
+    $slick.slick(slick);
+    makeSlickButton($slick, $btPrev, $btNext);
+     
 }
+
+
 function onGetCity(r){
     console.log(r);
     
@@ -227,7 +252,23 @@ function onResize(){
         map.setLevel(13);
     }
     
+    
 }
+function makeSlickButton($slick, $prev, $next) {
+    $prev.click(function() { 
+        $slick.slick('slickPrev') 
+    });
+    $next.click(function() { 
+        $slick.slick('slickNext') 
+    });
+    // $slick.find('.slick-dots').on('mouseenter', function() {
+    //     $slick.slick('slickPause');
+    // });
+    // $slick.find('.slick-dots').on('mouseleave', function() {
+    //     $slick.slick('slickPlay');
+    // });
+}
+
 
 /******************************* 이벤트 등록 ******************************/
 function onOverlayClick(){
@@ -235,6 +276,7 @@ function onOverlayClick(){
     data.lat = $(this).find('.co-wrapper').data('lat');
     data.lon = $(this).find('.co-wrapper').data('lon');
     $.get(todayURL, data, onToday);
+    $.get(weeklyURL, data, onWeekly);
     $('.co-wrapper').removeClass('click');
     $(this).find('.co-wrapper').addClass('click');
   
