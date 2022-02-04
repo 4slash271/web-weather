@@ -115,6 +115,8 @@ function initBg(){
  /******************************* 이벤트 콜백 *****************************/
  function onToday(r){
      console.log(r);
+     var $bgWrapper = $('.bg-wrapper');
+     var $bgWrap = $('.bg-wrap');
      var $wrapper = $('.weather-wrapper');
      var $title = $wrapper.find('.title-wrap');
      var $summery = $wrapper.find('.summery-wrap');
@@ -128,9 +130,14 @@ function initBg(){
      $desc.find('.temp-gap .min').text(r.main.temp_min);
      $icon.find('img').attr('src',getIcon(r.weather[0].icon));
 
+     $bgWrapper.children('div').eq(0).attr('class','bg-wrap bg1');
+     $bgWrapper.children('div').eq(1).attr('class','bg-wrap bg2');
+     $bgWrapper.children('div').eq(2).attr('class','bg-wrap bg3');
+     $bgWrap.addClass(weatherIcon['i'+r.weather[0].icon.substring(0, r.weather[0].icon.length-1)]);//r.weather[0].icon 안에는 문자열이 들어있다. 문자열을 배열로 반환하여 배열의 개수 뒤에서 하나 줄이기 'i01' 와 같은 형태로 바꿔줌
+     
 
      var data = cloneObject(sendData);
-     data.lat = r.coord.lat;
+     data.lat = r.coord.lat;ㄴ
      data.lon = r.coord.lon;
      console.log(data.lat);
      console.log(data.lon);
